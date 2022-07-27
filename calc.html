@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Калькулятор</title>
+    <style type="text/css">
+        body {
+            font-family: Arial;
+            background: #ddd;
+            color: #ccc;
+            font-weight: normal;
+        }
+
+        #wrap {
+            width: 100%;
+            display: block;
+            background-color: white;
+            margin: 0 auto 0;
+            border: #333 1px solid;
+        }
+
+        #body_ {
+            width: 300px;
+            border: 2px solid #999;
+            background-color: #222;
+            margin: 30px auto;
+        }
+
+        #display {
+            width: 220px;
+            height: 70px;
+            margin: 50px auto 0;
+            text-align: right;
+            font-size: 45px;
+            overflow: hidden;
+        }
+
+        table {
+            margin: 20px auto 40px;
+            font-size: 40px;
+            text-align: center;
+        }
+
+        td {
+            width: 45px;
+            height: 70px;
+        }
+
+        td:hover {
+            background-color: #333;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="wrap">
+        <div id="body_">
+            <div id="display"></div>
+            <table border="0">
+                <tr>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>+</td>
+                    <td>C</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>6</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>8</td>
+                    <td>9</td>
+                    <td>×</td>
+                </tr>
+                <tr>
+                    <td colspan="2">0</td>
+                    <td>.</td>
+                    <td>÷</td>
+                    <td>=</td>
+                </tr>
+        </div>
+    </div>
+
+    <script "type=text/javascript">
+
+            let oper;
+            let num0;
+            let num1;
+            let num2;
+            let dispLen;
+            let disp = document.getElementById('display');
+            let lastSym = disp.innerText.slice(-1);
+            
+            // ========================================================
+            // Добавление функций на нажатие
+            // ========================================================
+            const button = document.querySelectorAll('td');
+            button.forEach((item) => item.addEventListener('click', onClick));
+
+            function onClick() {
+
+                let sym = this.innerText;
+                let lastSym = disp.innerText.slice(-1);
+
+                // ========================================================
+                // Если выбрана цифра или точка
+                // ========================================================
+                if(/[\d\.]/.test(sym)) {
+                    if(disp.innerText == 'Error' || disp.innerText == 0) {
+                        disp.innerText = sym;
+                    } else {
+                        disp.innerText += sym;}
+                }
+
+                // ========================================================
+                // Если выбран "С"
+                // ========================================================
+                if(sym == 'C') {
+                    disp.innerText = '';
+                    num0 = num1 = num2 = '';
+                }
+
+                // ========================================================
+                // Если выбран "="
+                // ========================================================
+                if(sym == '=') {
+                    calc()
+                }
+
+                // ========================================================
+                // Если выбран оператор
+                // ========================================================
+                if(/[+÷×-]/.test(sym)) {
+                    if(disp.innerText != '') {
+                        num1 = disp.innerText;
+                        if(!/[+÷×-]/.test(lastSym)) {
+                            if(!/[+÷×-]/.test(disp.innerText)) {
+                                oper = sym;
+                                disp.innerText += sym;
+                                dispLen = disp.innerText.length;
+                            } else if(/^-/.test(disp.innerText)) {
+                                if(!/[+÷×-]/.test(lastSym) ) {
+                                    if(/[+÷×-]/.test(num1.slice(1))) {
+                                        calc()
+                                    } else {
+                                        oper = sym;
+                                        disp.innerText += sym;
+                                        dispLen = disp.innerText.length;
+                                    }
+                                } else {
+                                    repOper();
+                                }
+                            } else {calc()}
+                        } else {
+                            repOper();
+                        }
+                    } else {
+                        console.log('Дисплей пуст');
+                    }
+                }
+                
+                // ========================================================
+                // Вычисление
+                // ========================================================
+                function calc() {
+                    num0 = document.getElementById('display').innerText
+                    num2 = num0.substr(dispLen)
+                    num1 = parseFloat(num1, 10)
+                    num2 = parseFloat(num2, 10)
+                    if(oper == '+') {disp.innerText = num1 + num2}
+                    if(oper == '-') {disp.innerText = num1 - num2};
+                    if(oper == '×') {disp.innerText = num1 * num2};
+                    if(oper == '÷') {disp.innerText = num1 / num2};
+                    if(isNaN(disp.innerText)) {disp.innerText = num0}
+                }
+
+                // ========================================================
+                // Смена оператора
+                // ========================================================
+                function repOper() {
+                    oper = sym;
+                    num1 = num1.slice(0, num1.length -1)
+                    disp.innerText = num1 + sym;
+                }
+
+                // ========================================================
+                // Размер символов на дисплее
+                // ========================================================
+                if(disp.innerText.length >= 20) {disp.innerText = 'Error'}
+                else if(disp.innerText.length >= 13) {disp.style.fontSize = '20px'}
+                else if(disp.innerText.length >= 9) {disp.style.fontSize = '30px'}
+                else {disp.style.fontSize = '45px'}
+            }
+
+    </script>
+
+</body>
+
+</html>
