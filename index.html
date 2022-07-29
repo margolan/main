@@ -112,7 +112,9 @@
                 // Если выбрана цифра или точка
                 // ========================================================
                 if(/[\d\.]/.test(sym)) {
-                    if(disp.innerText == 'Error' || disp.innerText == 0) {
+                    if(/E/.test(disp.innerText)) {
+                        console.log('Error');
+                    } else if(disp.innerText == 0) {
                         disp.innerText = sym;
                     } else {
                         disp.innerText += sym;}
@@ -130,13 +132,17 @@
                 // Если выбран "="
                 // ========================================================
                 if(sym == '=') {
-                    calc()
+                    if(/E/.test(disp.innerText)) {
+                        console.log('Error');
+                    } else {
+                        calc()
+                    }
                 }
 
                 // ========================================================
                 // Если выбран оператор
                 // ========================================================
-                if(/[+÷×-]/.test(sym)) {
+                if(/[+÷×-]/.test(sym) && !/E/.test(disp.innerText)) {
                     if(disp.innerText != '') {
                         num1 = disp.innerText;
                         if(!/[+÷×-]/.test(lastSym)) {
@@ -185,14 +191,15 @@
                 // ========================================================
                 function repOper() {
                     oper = sym;
-                    num1 = num1.slice(0, num1.length -1)
+                    num1 = num1.slice(0, -1)
                     disp.innerText = num1 + sym;
+                    
                 }
 
                 // ========================================================
                 // Размер символов на дисплее
                 // ========================================================
-                if(disp.innerText.length >= 20) {disp.innerText = 'Error'}
+                if(disp.innerText.length >= 17 && !/E/.test(disp.innerText)) {disp.innerText = disp.innerText + ' E'}
                 else if(disp.innerText.length >= 13) {disp.style.fontSize = '20px'}
                 else if(disp.innerText.length >= 9) {disp.style.fontSize = '30px'}
                 else {disp.style.fontSize = '45px'}
