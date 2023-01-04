@@ -1,7 +1,6 @@
 - 👋 Hi, I’m @margolan
-- 👀 I’m interested in JavaScript and PHP
-- 🌱 I’m currently learning JavaScript
-- 💞️ I’m looking to collaborate on JavaScript
+- 👀 I’m interested in JavaScript, PostgreSQL and PHP
+- 🌱 I’m currently learning PHP
 - 📫 How to reach me: margolan@mail.ru
 
 <!---
